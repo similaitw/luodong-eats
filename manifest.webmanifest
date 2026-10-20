@@ -1,0 +1,19 @@
+{
+  "name": "羅東食刻｜今天吃什麼？",
+  "short_name": "羅東食刻",
+  "description": "羅東、五結、冬山今天吃什麼？免費在地美食選擇器。",
+  "lang": "zh-Hant",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fffaf3",
+  "theme_color": "#fff9f0",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
