@@ -29,9 +29,9 @@ MAX_COMPRESSED_BYTES = 60_000_000
 MAX_UNCOMPRESSED_BYTES = 160_000_000
 OSM_COPYRIGHT = "https://www.openstreetmap.org/copyright"
 OVERPASS_ENDPOINTS = (
+    "https://overpass.private.coffee/api/interpreter",
     "https://overpass-api.de/api/interpreter",
-    "https://overpass.kumi.systems/api/interpreter",
-    "https://overpass.nchc.org.tw/api/interpreter",
+    "https://lz4.overpass-api.de/api/interpreter",
 )
 OSM_POSTCODES = {"265":"羅東鎮","268":"五結鄉","269":"冬山鄉","266":"三星鄉","270":"蘇澳鎮"}
 
@@ -134,7 +134,7 @@ def fetch_osm_records() -> list[dict]:
                 "Content-Type":"application/x-www-form-urlencoded",
                 "Accept":"application/json",
             },method="POST")
-            with urllib.request.urlopen(req,timeout=80) as response:
+            with urllib.request.urlopen(req,timeout=45) as response:
                 body=response.read(16_000_000)
             parsed=json.loads(body.decode("utf-8-sig"))
             entries=parsed.get("elements",[])
