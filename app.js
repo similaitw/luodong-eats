@@ -122,7 +122,7 @@
     el("dialogDesc").textContent = item.s;
     const tags = el("dialogTags");
     tags.replaceChildren();
-    [item.a, item.c, budgetNames[item.b]].forEach(name => tags.appendChild(make("span", "", name)));
+    [item.a, item.c, budgetNames[item.b], ...(item.m ? [] : ["時段待確認"])].forEach(name => tags.appendChild(make("span", "", name)));
     el("dialogMap").href = mapUrl(item);
     updateDialogFavorite();
     if (!dialog.open) dialog.showModal();
@@ -181,6 +181,7 @@
     const meta = make("div", "card-meta");
     meta.appendChild(make("span", "card-tag tag-type", item.c));
     meta.appendChild(make("span", "card-tag", budgetNames[item.b]));
+    if (!item.m) meta.appendChild(make("span", "card-tag", "時段待確認"));
     body.appendChild(meta);
     body.appendChild(make("h3", "card-title", item.n));
     body.appendChild(make("p", "card-description", item.s));
