@@ -14,7 +14,7 @@
   const el = (id) => document.getElementById(id);
 
   try {
-    const stored = JSON.parse(localStorage.getItem(favoriteKey) || "[]");
+    const stored = JSON.parse(localStorage.getItem("luodong-eats-favs") || localStorage.getItem(favoriteKey) || "[]");
     if (Array.isArray(stored)) favorites = new Set(stored.filter(id => typeof id === "string" && byId.has(id)));
   } catch (_) { favorites = new Set(); }
 
@@ -48,7 +48,8 @@
   }
 
   function saveFavorites() {
-    try { localStorage.setItem(favoriteKey, JSON.stringify([...favorites])); }
+    try { localStorage.setItem(favoriteKey, JSON.stringify([...favorites]));
+      localStorage.setItem("luodong-eats-favs", JSON.stringify([...favorites])); }
     catch (_) { showToast("瀏覽器無法儲存收藏，請檢查隱私設定"); }
     updateFavoriteBadge();
   }
