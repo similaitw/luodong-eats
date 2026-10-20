@@ -10,6 +10,7 @@ import subprocess
 import sys
 import unicodedata
 import urllib.request
+import urllib.parse
 import zipfile
 from datetime import datetime
 from pathlib import Path
@@ -26,6 +27,14 @@ AREAS = {
 MAX_NEW_PER_RUN = 80
 MAX_COMPRESSED_BYTES = 60_000_000
 MAX_UNCOMPRESSED_BYTES = 160_000_000
+OSM_COPYRIGHT = "https://www.openstreetmap.org/copyright"
+OVERPASS_ENDPOINTS = (
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+    "https://overpass.nchc.org.tw/api/interpreter",
+)
+OSM_POSTCODES = {"265":"羅東鎮","268":"五結鄉","269":"冬山鄉","266":"三星鄉","270":"蘇澳鎮"}
+
 
 def norm(value: object) -> str:
     """保守去重：只忽略排版差異，避免把不同分店硬湊成同家。"""
@@ -108,6 +117,77 @@ def fetch_records(url: str = SOURCE_URL, fixture: str | None = None) -> list[dic
         raise RuntimeError("官方資料缺少 RestaurantID / RestaurantName，格式可能變更")
     return results
 
+def fetch_osm_records() -> list[dict]:
+    """政府網域阻擋 CI 時，從 OpenStreetMap 取已有名稱與地址的 POI，不臆測行政區。"""
+    query = (
+        '[out:json][timeout:50];('
+        'nwr["amenity"~"^(restaurant|fast_food|cafe|food_court)$"](24.52,121.59,24.78,121.94);'
+        'nwr["shop"~"^(bakery|pastry)$"](24.52,121.59,24.78,121.94);'
+        ');out center tags;'
+    )
+    failures=[]
+    for endpoint in OVERPASS_ENDPOINTS:
+        try:
+            data=urllib.parse.urlencode({"data":query}).encode("utf-8")
+            req=urllib.request.Request(endpoint,data=data,headers={
+                "User-Agent":"LuodongEats/1.0 (noncommercial restaurant listing)",
+                "Content-Type":"application/x-www-form-urlencoded",
+                "Accept":"application/json",
+            },method="POST")
+            with urllib.request.urlopen(req,timeout=80) as response:
+                body=response.read(16_000_000)
+            parsed=json.loads(body.decode("utf-8-sig"))
+            entries=parsed.get("elements",[])
+            if not isinstance(entries,list) or len(entries)<5:
+                raise RuntimeError("OpenStreetMap 回應太少或資料格式異常")
+            result=[]
+            for poi in entries:
+                tags=poi.get("tags") or {}
+                name=str(tags.get("name:zh") or tags.get("name") or "").strip()
+                if len(name)<2 or len(name)>80:
+                    continue
+                addr_city=str(tags.get("addr:city") or tags.get("addr:county") or "")
+                if addr_city and norm(addr_city)!="宜蘭縣":
+                    continue
+                combined=" ".join(str(tags.get(k,"")) for k in
+                    ("addr:district","addr:subdistrict","addr:town","addr:city","addr:full"))
+                town=next((t for t in AREAS if t in combined),None)
+                postcode=str(tags.get("addr:postcode") or "").strip()
+                if town is None:
+                    town=OSM_POSTCODES.get(postcode)
+                if town is None:
+                    continue
+                street=str(tags.get("addr:street") or "").strip()
+                house=str(tags.get("addr:housenumber") or "").strip()
+                full=str(tags.get("addr:full") or "").strip()
+                if street:
+                    street=street+(house if house and house not in street else "")
+                elif full:
+                    street=full.replace("宜蘭縣","").replace(town,"").strip()
+                if not street:
+                    continue
+                if not any(k in street for k in ("路","街","巷","弄","村","號")):
+                    continue
+                osm_type=poi.get("type","node")
+                osm_id=poi.get("id")
+                if osm_type not in ("node","way","relation") or not isinstance(osm_id,int):
+                    continue
+                link=f"https://www.openstreetmap.org/{osm_type}/{osm_id}"
+                result.append({
+                    "RestaurantID":f"osm:{osm_type}:{osm_id}",
+                    "RestaurantName":name,
+                    "PostalAddress":{"City":"宜蘭縣","Town":town,"StreetAddress":street},
+                    "SourceURL":link,
+                })
+            if not result:
+                raise RuntimeError("OpenStreetMap 尚無具完整地址的在地店家")
+            print(f"官方來源不可用，備援 Overpass 回傳 {len(entries)} 個 POI，有效具地址店家 {len(result)} 家")
+            return result
+        except Exception as exc:
+            failures.append(endpoint+": "+str(exc)[:120])
+            print("OpenStreetMap 備援失敗:",failures[-1],file=sys.stderr)
+    raise RuntimeError("所有公開資料來源都失敗；未改動網站。"+ "; ".join(failures))
+
 def classify(name: str) -> tuple[str, str, str]:
     if any(word in name for word in ("咖啡", "豆花", "甜點", "蛋糕", "冰店", "烘焙", "手搖", "茶飲", "甜品")):
         return "咖啡甜點", "☕", "green"
@@ -141,12 +221,14 @@ def parse_restaurant(record: dict, checked_at: str) -> dict | None:
         area = "南方澳"
     category, emoji, tone = classify(name)
     address = "宜蘭縣" + town + street
+    osm_record=rid.startswith("osm:")
     return {
-        "id": "gov" + hashlib.sha256(rid.encode("utf-8")).hexdigest()[:14],
+        "id": ("osm" if osm_record else "gov") + hashlib.sha256(rid.encode("utf-8")).hexdigest()[:14],
         "n": name, "a": area, "c": category, "m": "", "b": 0,
         "s": "觀光署資料庫收錄，出發前請確認實際營業資訊。",
         "addr": address, "e": emoji, "t": tone,
-        "sourceUrl": SOURCE_PAGE, "sourceLabel": SOURCE_LABEL,
+        "sourceUrl": _pick(record,"SourceURL") if osm_record else SOURCE_PAGE,
+        "sourceLabel": "© OpenStreetMap contributors（ODbL）" if osm_record else SOURCE_LABEL,
         "sourceCheckedAt": checked_at,
         "externalID": rid,
     }
@@ -232,9 +314,19 @@ def main() -> int:
     path = ROOT/"data-auto.js"
     old, head, tail = read_auto(path)
     curated = read_curated()
-    records = fetch_records(fixture=args.fixture)
+    source_name=SOURCE_LABEL
+    source_link=SOURCE_PAGE
+    try:
+        records=fetch_records(fixture=args.fixture)
+    except Exception as exc:
+        if args.fixture:
+            raise
+        print("交通部觀光署來源暫不可用，改查 OpenStreetMap："+str(exc),file=sys.stderr)
+        records=fetch_osm_records()
+        source_name="OpenStreetMap contributors（ODbL）"
+        source_link=OSM_COPYRIGHT
     updated, report = reconcile(records,curated,old,checked_at,args.max_new)
-    report.update({"checkedAt":checked_at,"source":SOURCE_PAGE,"sourceDownload":SOURCE_URL,
+    report.update({"checkedAt":checked_at,"source":source_link,"sourceName":source_name,"sourceDownload":SOURCE_URL if source_name==SOURCE_LABEL else "Overpass API",
                    "feedRecordCount":len(records),"mode":"dry-run" if args.dry_run else "scheduled"})
     print(json.dumps({key:value for key,value in report.items() if key!="reviewItems"},ensure_ascii=False,indent=2))
     if args.dry_run:
