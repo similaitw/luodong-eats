@@ -23,9 +23,9 @@ window.FOOD_DATA = source.map(shop => {
   };
 });
 window.DATA_META = {
-  updatedAt: "2026-10-20T19:00:00+08:00",
-  updatedLabel: "來源名單已整理（營業狀態未即時查核）",
-  cadence: "人工更新",
+  updatedAt: /^\d{4}-\d{2}-\d{2}$/.test(window.LUODONG_LAST_OFFICIAL_CHECK || "") ? window.LUODONG_LAST_OFFICIAL_CHECK+"T09:00:00+08:00" : "2026-10-20T19:00:00+08:00",
+  updatedLabel: "每週公開資料掃描（營業狀態未即時查核）",
+  cadence: "每週一早上自動檢查",
   scope: "羅東／五結／冬山／三星／蘇澳／南方澳"
 };
 })();
