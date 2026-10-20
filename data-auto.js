@@ -5,10 +5,10 @@ window.LUODONG_OFFICIAL_DATA = [];
   const shops = Array.isArray(window.LUODONG_RESTAURANTS) ? window.LUODONG_RESTAURANTS : [];
   const additions = Array.isArray(window.LUODONG_OFFICIAL_DATA) ? window.LUODONG_OFFICIAL_DATA : [];
   const ids = new Set(shops.map(x => x.id));
-  const names = new Set(shops.map(x => String(x.n || "").normalize("NFKC").toLowerCase().replace(/[\\s　()（）．·-]/g, "")));
+  const names = new Set(shops.map(x => String(x.n || "").normalize("NFKC").toLowerCase().replace(/[\s　()（）．·-]/g, "")));
   let count = 0;
   for (const row of additions) {
-    const name = String(row.n || "").normalize("NFKC").toLowerCase().replace(/[\\s　()（）．·-]/g, "");
+    const name = String(row.n || "").normalize("NFKC").toLowerCase().replace(/[\s　()（）．·-]/g, "");
     if (!row.id || !row.n || !row.addr || ids.has(row.id) || names.has(name)) continue;
     shops.push(row);
     ids.add(row.id); names.add(name); count++;
@@ -19,3 +19,4 @@ window.LUODONG_OFFICIAL_DATA = [];
   stats.total = shops.length;
   window.LUODONG_DATA_STATS = stats;
 })();
+window.LUODONG_LAST_OFFICIAL_CHECK = "尚未執行";
