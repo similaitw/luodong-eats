@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#fff9f0" />
+  <meta name="description" content="羅東今天吃什麼？一鍵抽選羅東、五結、冬山在地美食，依地區、餐點、預算、用餐時段篩選，收藏口袋名單並開啟地圖導航。" />
+  <meta property="og:title" content="羅東食刻｜今天吃什麼？" />
+  <meta property="og:description" content="吃什麼交給羅東食刻！在地美食隨機抽選、收藏、篩選、導航。" />
+  <meta property="og:type" content="website" />
+  <meta name="color-scheme" content="light" />
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="stylesheet" href="./style.css" />
+  <title>羅東食刻｜今天吃什麼？</title>
+  <script src="./data.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#explore">跳到店家清單</a>
+  <div class="announcement"><span class="live-dot" aria-hidden="true"></span> 在地好味道，下一餐不煩惱 <span class="announcement-right">羅東 · 五結 · 冬山</span></div>
+  <header class="site-header shell">
+    <a class="brand" href="./" aria-label="羅東食刻首頁"><span class="brand-icon" aria-hidden="true">🍚</span><span>羅東<span class="brand-accent">食刻</span><small>LUODONG EATS</small></span></a>
+    <nav class="header-nav" aria-label="主選單">
+      <a href="#explore" class="nav-link">探索美食</a>
+      <a href="#how-it-works" class="nav-link nav-desktop">使用方式</a>
+      <button type="button" id="favoritesToggle" class="nav-fav" aria-pressed="false"><span aria-hidden="true">♥</span> 我的收藏 <span id="favoriteCount" class="fav-count">0</span></button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero shell" aria-labelledby="heroTitle">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="eyebrow-spark">✳</span> 在地人的美食選擇困難救星</div>
+        <h1 id="heroTitle">今天在羅東，<br /><span>吃什麼好？</span></h1>
+        <p class="hero-subtitle">早餐吃米苔目、午餐來碗肉羹、晚上衝夜市。<br class="wide-only" />下一餐，交給一點點運氣和滿滿的好味道。</p>
+        <div class="hero-actions">
+          <button type="button" id="heroRandom" class="primary-btn"><span class="button-icon" aria-hidden="true">✦</span> 幫我決定！ <span aria-hidden="true">↗</span></button>
+          <a href="#explore" class="secondary-btn">自己慢慢挑 <span aria-hidden="true">↓</span></a>
+        </div>
+        <div class="hero-foot"><div class="hero-avatars" aria-hidden="true"><span>🥟</span><span>🍜</span><span>🧋</span></div><span><strong id="heroCount">—</strong> 家精選店家，持續擴充中</span></div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="art-ring art-ring-one"></div><div class="art-ring art-ring-two"></div>
+        <div class="art-sticker sticker-top">宜蘭好食光 <span>✹</span></div>
+        <div class="art-plate"><span class="art-main">🍜</span><span class="art-side art-side-one">🥬</span><span class="art-side art-side-two">🥢</span></div>
+        <div class="art-sticker sticker-bottom">下一站，美味出發！</div>
+        <span class="art-star art-star-one">✳</span><span class="art-star art-star-two">✻</span>
+      </div>
+    </section>
+
+    <section class="quick-section">
+      <div class="shell">
+        <div class="quick-heading"><span class="eyebrow-sm">EAT BY MOOD</span><h2>你現在想吃點什麼？</h2><p>不用想太多，先選一個感覺</p></div>
+        <div class="mood-grid" id="moodGrid">
+          <button class="mood-card mood-yellow" type="button" data-quick="cheap"><span class="mood-emoji">🥟</span><strong>銅板解決</strong><small>平價小吃</small><span class="mood-arrow">↗</span></button>
+          <button class="mood-card mood-pink" type="button" data-quick="dinner"><span class="mood-emoji">🍲</span><strong>好好吃飯</strong><small>午晚餐推薦</small><span class="mood-arrow">↗</span></button>
+          <button class="mood-card mood-blue" type="button" data-quick="night"><span class="mood-emoji">🍢</span><strong>夜市走走</strong><small>羅東經典小吃</small><span class="mood-arrow">↗</span></button>
+          <button class="mood-card mood-green" type="button" data-quick="coffee"><span class="mood-emoji">☕</span><strong>喝點甜的</strong><small>咖啡下午茶</small><span class="mood-arrow">↗</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="explore-section shell" id="explore" aria-labelledby="exploreTitle">
+      <div class="section-title-row"><div><span class="eyebrow-sm">DISCOVER LUODONG</span><h2 id="exploreTitle">美食探索地圖 <span class="scribble">✳</span></h2><p>從羅東夜市到五結、冬山，找出今天的命定美食。</p></div><button type="button" id="surpriseButton" class="outline-btn"><span aria-hidden="true">🎲</span> 隨機抽一家</button></div>
+      <div class="filters" aria-label="篩選店家">
+        <div class="search-wrap"><span class="search-icon" aria-hidden="true">⌕</span><input type="search" id="search" placeholder="搜尋店名、餐點或地點…" autocomplete="off" aria-label="搜尋店家、餐點或地點" /><button id="clearSearch" type="button" class="clear-search" aria-label="清除搜尋" hidden>×</button></div>
+        <div class="filter-control"><label for="areaFilter">地區</label><select id="areaFilter"><option value="">全部地區</option></select></div>
+        <div class="filter-control"><label for="mealFilter">時段</label><select id="mealFilter"><option value="">不限時段</option><option value="早餐">早餐</option><option value="午餐">午餐</option><option value="下午茶">下午茶</option><option value="晚餐">晚餐</option><option value="宵夜">宵夜</option></select></div>
+        <div class="filter-control"><label for="budgetFilter">預算參考</label><select id="budgetFilter"><option value="">不限預算</option><option value="1">平價優先</option><option value="2">一般消費</option><option value="3">聚餐選擇</option></select></div>
+        <div class="category-tabs" id="categoryTabs" role="group" aria-label="美食分類"></div>
+      </div>
+      <div class="results-heading"><span id="resultLabel">正在整理美味清單…</span><button id="resetFilters" type="button" class="reset-btn">重設篩選 ↺</button></div>
+      <div id="restaurantGrid" class="restaurant-grid" aria-live="polite"></div>
+      <div id="emptyState" class="empty-state" hidden><div>🍽️</div><h3>目前沒有符合條件的店家</h3><p>換個分類、預算或地區，或按重設篩選再試一次。</p><button type="button" id="emptyReset" class="secondary-btn">查看全部店家</button></div>
+      <div class="data-note"><span aria-hidden="true">ⓘ</span> 店家資訊為人工整理的初始名單；餐點、預算分級為參考，非即時菜單或營業狀態。出發前請點開 Google 地圖確認。</div>
+    </section>
+
+    <section id="how-it-works" class="about-section">
+      <div class="shell about-inner"><div><span class="eyebrow-sm">HOW IT WORKS</span><h2>吃飯這件事，<br />可以簡單一點。</h2><p>不必下載 App、不用註冊帳號，挑選喜歡的類型後，一鍵決定要吃哪一家。</p><a class="about-link" href="https://github.com/similaitw/luodong-eats/issues/new" target="_blank" rel="noopener noreferrer">推薦新的口袋店家 ↗</a></div>
+      <div class="how-steps"><div><span>01</span><strong>挑個好味道</strong><p>依地區、用餐時段與餐點類型篩選。</p></div><div><span>02</span><strong>一鍵抽選</strong><p>不知道吃哪間？讓網站幫你抽一間。</p></div><div><span>03</span><strong>導航出發</strong><p>收藏愛店或開啟 Google 地圖查詢路線。</p></div></div></div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="shell footer-inner"><div><a class="footer-brand" href="./">🍚 羅東食刻</a><p>做給喜歡宜蘭，也喜歡好好吃飯的你。</p></div><div><p>羅東 · 五結 · 冬山</p><p>2026 © 羅東食刻 · <a href="https://github.com/similaitw/luodong-eats" target="_blank" rel="noopener noreferrer">GitHub 專案 ↗</a></p></div></div></footer>
+
+  <dialog id="pickDialog" class="pick-dialog" aria-labelledby="dialogHeading">
+    <div class="dialog-content"><button type="button" class="dialog-close" id="dialogClose" aria-label="關閉視窗">×</button>
+      <div class="dialog-eyebrow">✦ 今天的命定美食 ✦</div>
+      <div id="dialogEmoji" class="dialog-emoji" aria-hidden="true">🍜</div>
+      <p class="dialog-kicker">就是這家了！</p>
+      <h2 id="dialogHeading">準備出發吧</h2>
+      <p id="dialogDesc" class="dialog-desc"></p>
+      <div id="dialogTags" class="dialog-tags"></div>
+      <div class="dialog-actions"><a id="dialogMap" class="primary-btn" href="#" target="_blank" rel="noopener noreferrer">開啟地圖導航 ↗</a><button id="dialogAgain" type="button" class="secondary-btn">再抽一次 ↻</button></div>
+      <button id="dialogFavorite" type="button" class="dialog-favorite">♡ 加入我的收藏</button>
+    </div>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
