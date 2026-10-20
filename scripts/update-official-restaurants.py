@@ -231,9 +231,15 @@ def main() -> int:
     if args.dry_run:
         return 0
     # 不隨每週更新 sourceCheckedAt：只有新收錄店家才標記當日，避免無意義大量差異。
-    if updated != old:
+    tail_new, stamp_count = re.subn(
+        r'(window\.LUODONG_LAST_OFFICIAL_CHECK\s*=\s*)"[^"]*"',
+        lambda m: m.group(1) + json.dumps(checked_at,ensure_ascii=False),tail,count=1
+    )
+    if stamp_count != 1:
+        raise RuntimeError("缺少官方資料最後檢查日期標記，停止寫入")
+    if updated != old or tail_new != tail:
         payload=json.dumps(updated,ensure_ascii=False,indent=2)
-        path.write_text(head+payload+tail,encoding="utf-8")
+        path.write_text(head+payload+tail_new,encoding="utf-8")
     report_dir=ROOT/"data"
     report_dir.mkdir(exist_ok=True)
     (report_dir/"update-status.json").write_text(
