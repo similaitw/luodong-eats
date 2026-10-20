@@ -5,7 +5,7 @@
   const byId = new Map(items.map(item => [item.id, item]));
   const favoriteKey = "luodong-eats:favorites:v1";
   const categories = ["全部", "小吃", "夜市", "正餐", "異國", "咖啡甜點"];
-  const budgetNames = { 1: "平價優先", 2: "一般消費", 3: "聚餐選擇" };
+  const budgetNames = { 0: "價格待確認", 1: "平價優先", 2: "一般消費", 3: "聚餐選擇" };
   const state = { query: "", area: "", meal: "", budget: "", category: "全部", favoritesOnly: false, lastId: null };
   let favorites = new Set();
   let currentPick = null;
@@ -68,7 +68,7 @@
   }
 
   function mealMatches(item) {
-    return !state.meal || item.m.split(",").includes(state.meal);
+    return !state.meal || !item.m || item.m.split(",").includes(state.meal);
   }
 
   function filteredItems() {
@@ -183,6 +183,7 @@
     body.appendChild(meta);
     body.appendChild(make("h3", "card-title", item.n));
     body.appendChild(make("p", "card-description", item.s));
+    if (item.sourceUrl) { const source = make("a", "card-source", "↗ 查看店家資料來源"); source.href = item.sourceUrl; source.target = "_blank"; source.rel = "noopener noreferrer"; body.appendChild(source); }
     const actions = make("div", "card-actions");
     const map = make("a", "card-map", "地圖與路線 ↗");
     map.href = mapUrl(item);
@@ -250,8 +251,8 @@
     el("explore").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  const areaOrder = ["羅東夜市", "羅東市區", "羅東林場", "羅東運動公園", "五結", "冬山"];
-  areaOrder.filter(area => items.some(item => item.a === area)).forEach(area => {
+  const areaOrder = ["羅東夜市", "羅東市區", "羅東林場", "羅東運動公園", "五結", "冬山", "三星", "蘇澳", "南方澳"];
+  [...new Set([...areaOrder, ...items.map(item=>item.a)])].filter(area => items.some(item => item.a === area)).forEach(area => {
     const option = make("option", "", area);
     option.value = area;
     areaSelect.appendChild(option);
