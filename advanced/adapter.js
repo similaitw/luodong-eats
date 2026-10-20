@@ -9,7 +9,7 @@ window.FOOD_DATA = source.map(shop => {
   if (!periods.length) periods.push("早餐","午晚餐","飲料甜點","宵夜");
   const foodName = String(shop.s||"").replace(/^店家特色：/,"").split("（")[0].trim();
   const foods = [foodName || shop.c];
-  const types = [shop.c,shop.c==="小吃"?"台式":shop.c];
+  const types = [...new Set([shop.c,shop.c==="小吃"?"台式":shop.c])];
   if(shop.c==="咖啡甜點") types.push("甜點");
   if(shop.b===1) types.push("省錢");
   return {
