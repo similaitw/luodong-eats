@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0c0f" />
+  <meta name="description" id="metaDescription" content="羅東周邊美食地圖、篩選與最多五站路線規畫" />
+  <title>羅東食刻｜地圖與美食路線</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-view="list">
+  <header class="hero" id="top">
+    <div class="navwrap">
+      <a class="brand" href="./" aria-label="Location Eats 首頁">
+        <span class="brandmark brandmark-logo" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 14C18.8 15.6 18.8 17.8 20 19.4C21.2 21 21.2 23.2 20 24.8" />
+            <path d="M30 11.5C28.8 13.1 28.8 15.3 30 16.9C31.2 18.5 31.2 20.7 30 22.3" />
+            <path d="M40 14C38.8 15.6 38.8 17.8 40 19.4C41.2 21 41.2 23.2 40 24.8" />
+            <path d="M14.5 30H47.5C47.5 40.6 41.1 47.5 31 47.5C20.9 47.5 14.5 40.6 14.5 30Z" />
+            <path d="M13 30H49" />
+            <path d="M18 50.5H44" />
+            <path d="M46 19L54 11" />
+            <path d="M49 23L57 15" />
+          </svg>
+        </span>
+        <span id="brandName">羅東食刻・進階地圖</span>
+      </a>
+      <div class="nav-actions">
+        <button id="dataBtn" class="theme-trigger" type="button" aria-label="匯入匯出本機資料"><span>↕</span><span class="theme-trigger-label">資料</span></button>
+        <button id="themeBtn" class="theme-trigger" type="button" aria-label="選擇網站主題"><span id="themeDot" class="theme-dot"></span><span class="theme-trigger-label">主題</span></button>
+      </div>
+    <a href="../" class="theme-trigger" style="font-weight:900;min-height:36px;display:inline-flex;align-items:center;justify-content:center;padding:7px 12px;margin-top:7px;margin-left:22px;text-decoration:none;border:1px solid currentColor;border-radius:12px;">← 回快速探索首頁</a>
+    </div>
+    <div class="hero-inner">
+      <p id="shortName" class="eyebrow">LOCATION EATS</p>
+      <h1>今天，<span>吃這間。</span></h1>
+      <p class="lead"><span id="heroLead">依時段、口味、區域挑；真的選不出來就抽一家，抽完直接導航。</span></p>
+      <div class="hero-actions">
+        <button id="randomHero" class="primary big" type="button">🎲 幫我抽一家</button>
+        <button id="nearbyBtn" class="secondary big" type="button">📍 用目前位置規劃</button>
+      </div>
+      <div class="stats">
+        <span><b id="countAll">0</b> 個抽籤選擇</span>
+        <span><b id="countVisible">0</b> 個符合條件的抽籤選擇</span>
+        <span id="nowHint">現在適合：—</span>
+        <span id="dataUpdateHint">資料更新：—</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="toolbar stickybar" aria-label="篩選工具">
+      <div class="periods" id="periodFilters">
+        <button class="chip active" data-period="全部">全部</button>
+        <button class="chip" data-period="早餐">🌅 早餐</button>
+        <button class="chip" data-period="午晚餐">🍛 午晚餐</button>
+        <button class="chip" data-period="飲料甜點">🧋 飲料甜點</button>
+        <button class="chip" data-period="宵夜">🌙 宵夜</button>
+      </div>
+      <div class="searchrow">
+        <label class="searchbox">
+          <span>⌕</span>
+          <input id="searchInput" type="search" placeholder="搜尋店名、餐點、類型…" autocomplete="off" />
+        </label>
+        <button id="moreFiltersBtn" class="secondary" type="button">篩選</button>
+        <button id="viewToggle" class="secondary" type="button" aria-controls="mapView" aria-expanded="false">🗺️ 地圖</button>
+      </div>
+      <div id="activeFilterSummary" class="active-filter-summary" hidden aria-label="已套用篩選"></div>
+    </section>
+
+    <section id="mapView" class="map-view" aria-label="店家地圖" hidden>
+      <div class="map-tools">
+        <button id="campusBtn" class="secondary" type="button">⌂ 回中心點</button>
+        <button id="mapLocationBtn" class="secondary" type="button">📍 定位起點</button>
+        <button id="mapRandomBtn" class="primary" type="button">🎲 抽一家</button>
+        <button id="mapRouteBtn" class="secondary" type="button" aria-expanded="false" aria-controls="mapRouteDrawer">路線</button>
+      </div>
+      <label class="map-shop-picker" for="mapShopSelect">店家 <select id="mapShopSelect"></select></label>
+      <div class="map-status-row">
+        <p id="mapCoverage" class="map-notice" role="status"></p>
+        <a id="openGoogleMap" target="_blank" rel="noopener" aria-label="開啟 Google Maps">Google Maps ↗</a>
+      </div>
+      <p id="mapMessage" class="map-notice" role="status" hidden></p>
+      <div id="mapSelection" class="map-selection" hidden>
+        <span id="mapShopInfo"><span id="mapShopAddress"></span><span id="mapShopFood"></span></span>
+        <button id="mapFavoriteBtn" class="secondary" type="button">♡ 收藏</button>
+        <button id="mapAddRouteBtn" class="secondary" type="button">＋ 路線</button>
+        <button id="mapNavigateBtn" class="primary" type="button">導航</button>
+      </div>
+      <div class="map-stage">
+        <div id="foodMap" aria-label="Google Maps 店家地圖"></div>
+        <aside id="mapRouteDrawer" class="map-route-drawer" aria-label="美食路線規畫" hidden>
+          <button id="closeMapRoute" class="secondary" type="button">收合路線 ×</button>
+        </aside>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div class="content-col">
+        <div class="sectionhead">
+          <div>
+            <p class="eyebrow dark">CURATED LIST</p>
+            <h2 id="listTitle">全部店家</h2>
+          </div>
+          <button id="randomList" class="primary" type="button">🎲 不知道吃什麼</button>
+        </div>
+        <div id="cards" class="cards"></div>
+        <div id="emptyState" class="empty" hidden>
+          <div class="emptyicon">🍽️</div>
+          <h3>這組條件沒有結果</h3>
+          <p>少勾一個條件，或直接讓我幫你抽。</p>
+          <button id="emptyClear" class="primary" type="button">清除篩選</button>
+        </div>
+      </div>
+
+      <aside id="mapPanel" class="map-panel" aria-label="地圖與路線規畫">
+        <div class="maphead">
+          <div>
+            <p class="eyebrow dark">MAP + ROUTE</p>
+            <h2>地圖・路線規畫</h2>
+          </div>
+          <span class="livebadge">免 API Key</span>
+        </div>
+        <div class="mapframe-wrap">
+          <iframe id="mapFrame" class="mapframe" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="餐廳地圖"></iframe>
+        </div>
+        <div class="route-box">
+          <label>起點
+            <select id="originSelect">
+              <option value="">我的目前位置（由 Google Maps 判定）</option>
+            </select>
+          </label>
+          <label>方式
+            <select id="travelMode">
+              <option value="walking">步行</option>
+              <option value="driving">機車／汽車</option>
+              <option value="transit">大眾運輸</option>
+            </select>
+          </label>
+          <button id="routeSelected" class="primary wide" type="button">開始導航</button>
+          <p class="micro">「機車／汽車」會先以道路導航開啟；進 Google Maps 後可再切換可用交通模式。營業時段與價格請至店家頁面確認。</p>
+        </div>
+
+        <div class="route-list-box">
+          <div class="route-title-row">
+            <h3>🍜 我的美食路線</h3>
+            <button id="clearRoute" class="textbtn" type="button">清空</button>
+          </div>
+          <p class="micro">最多加入 5 家；適合安排一段自己的美食路線。</p>
+          <ol id="routeList" class="route-list"></ol>
+          <button id="openMultiRoute" class="secondary wide" type="button" disabled>開啟多站路線</button>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <nav class="mobile-bottom-bar" aria-label="手機快速操作">
+    <button id="mobileListBtn" class="mobile-nav-btn active" type="button" aria-pressed="true" aria-label="清單"><span>☰</span><b>清單</b></button>
+    <button id="mobileRandomBtn" class="mobile-nav-btn random" type="button" aria-label="抽一家"><span>🎲</span><b>抽一家</b></button>
+    <button id="mobileMapBtn" class="mobile-nav-btn" type="button" aria-pressed="false" aria-label="地圖"><span>🗺️</span><b>地圖</b></button>
+  </nav>
+
+  <dialog id="filterDialog" class="filter-dialog">
+    <div class="filter-sheet">
+      <div class="filter-sheet-head">
+        <div>
+          <p class="eyebrow dark">FILTER</p>
+          <h2>進階篩選</h2>
+        </div>
+        <button id="filterDialogClose" class="dialog-close" type="button" aria-label="關閉">×</button>
+      </div>
+      <div class="filter-section">
+        <h3>特色</h3>
+        <div id="quickFilters" class="filter-options"></div>
+      </div>
+      <div class="filter-section">
+        <label class="filter-area-label" for="areaSelect">區域</label>
+        <select id="areaSelect" aria-label="區域">
+          <option value="">所有區域</option>
+        </select>
+      </div>
+      <div class="filter-sheet-actions">
+        <button id="clearFilters" class="secondary" type="button">清除全部</button>
+        <button id="applyFilters" class="primary" type="button">套用篩選</button>
+      </div>
+    </div>
+  </dialog>
+  <dialog id="dataDialog" class="theme-dialog">
+    <div class="theme-sheet data-sheet">
+      <div class="theme-sheet-head">
+        <div>
+          <p class="eyebrow dark">LOCAL DATA</p>
+          <h2>備份與還原</h2>
+        </div>
+        <button id="dataDialogClose" class="dialog-close" type="button" aria-label="關閉">×</button>
+      </div>
+      <p class="theme-help">資料只存在目前瀏覽器。匯出後，可在其他瀏覽器或新裝置匯入。</p>
+
+      <div class="backup-status">
+        <div><b id="backupFavoriteCount">0</b><span>收藏店家</span></div>
+        <div><b id="backupVisitCount">0</b><span>吃過紀錄</span></div>
+        <div><b id="backupKeyCount">0</b><span>本機資料項目</span></div>
+      </div>
+
+      <div class="backup-actions">
+        <button id="exportDataBtn" class="primary wide" type="button">⬇️ 匯出備份檔</button>
+        <button id="importDataBtn" class="secondary wide" type="button">⬆️ 匯入備份檔</button>
+        <input id="importDataInput" type="file" accept=".json,application/json" hidden />
+      </div>
+
+      <div class="backup-note">
+        <b>會備份什麼？</b>
+        <p>收藏、主題，以及之後加入的「我吃過」紀錄。匯入時只接受目前 APP_SLUG 自己的備份格式。</p>
+      </div>
+      <p id="backupMessage" class="backup-message" role="status" aria-live="polite"></p>
+    </div>
+  </dialog>
+
+  <dialog id="themeDialog" class="theme-dialog">
+    <form method="dialog" class="theme-sheet">
+      <div class="theme-sheet-head">
+        <div>
+          <p class="eyebrow dark">THEME</p>
+          <h2>選擇網站主題</h2>
+        </div>
+        <button class="dialog-close" value="close" aria-label="關閉">×</button>
+      </div>
+      <p class="theme-help">選好後會自動記住，下次打開維持同一套風格。</p>
+      <div class="theme-grid">
+        <button class="theme-option" type="button" data-theme-choice="classic">
+          <span class="theme-preview preview-classic"><i></i><i></i><i></i></span>
+          <span><b>經典黑綠</b><small>Location Eats / 高對比</small></span>
+          <em>✓</em>
+        </button>
+        <button class="theme-option" type="button" data-theme-choice="cream">
+          <span class="theme-preview preview-cream"><i></i><i></i><i></i></span>
+          <span><b>奶油橘</b><small>溫暖 / 美食感</small></span>
+          <em>✓</em>
+        </button>
+        <button class="theme-option" type="button" data-theme-choice="ocean">
+          <span class="theme-preview preview-ocean"><i></i><i></i><i></i></span>
+          <span><b>深海藍</b><small>清爽 / 沉穩</small></span>
+          <em>✓</em>
+        </button>
+        <button class="theme-option" type="button" data-theme-choice="berry">
+          <span class="theme-preview preview-berry"><i></i><i></i><i></i></span>
+          <span><b>莓果粉</b><small>甜點 / 活潑</small></span>
+          <em>✓</em>
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="randomDialog" class="random-dialog">
+    <form method="dialog" class="dialog-card">
+      <button class="dialog-close" value="close" aria-label="關閉">×</button>
+      <div class="slot">今天就吃</div>
+      <div id="randomEmoji" class="randomemoji">🍜</div>
+      <h2 id="randomName">—</h2>
+      <p id="randomFood" class="randomfood">—</p>
+      <div id="randomMeta" class="randommeta"></div>
+      <div class="dialog-actions">
+        <button id="rerollBtn" type="button" class="secondary">再抽一次</button>
+        <button id="randomMapBtn" type="button" class="secondary">看地圖</button>
+        <button id="randomNavBtn" type="button" class="primary">直接導航</button>
+      </div>
+    </form>
+  </dialog>
+
+  <template id="cardTpl">
+    <article class="food-card">
+      <div class="card-top">
+        <div class="badges"></div>
+        <button class="heart" type="button" aria-label="收藏">♡</button>
+      </div>
+      <h3 class="food-name"></h3>
+      <p class="food-rec"></p>
+      <p class="food-note"></p>
+      <div class="meta-row"></div>
+      <div class="card-actions">
+        <button class="map-btn secondary" type="button">🗺️ 地圖</button>
+        <button class="route-add secondary" type="button">＋ 路線</button>
+        <button class="nav-btn primary" type="button">導航</button>
+      </div>
+    </article>
+  </template>
+
+  <script src="config.js"></script>
+  <script src="../data.js"></script>
+  <script src="../data-extra.js"></script>
+  <script src="adapter.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
