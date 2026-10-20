@@ -225,7 +225,7 @@ def parse_restaurant(record: dict, checked_at: str) -> dict | None:
     return {
         "id": ("osm" if osm_record else "gov") + hashlib.sha256(rid.encode("utf-8")).hexdigest()[:14],
         "n": name, "a": area, "c": category, "m": "", "b": 0,
-        "s": "觀光署資料庫收錄，出發前請確認實際營業資訊。",
+        "s": ("OpenStreetMap 社群地圖收錄，出發前請確認實際營業資訊。" if osm_record else "觀光署資料庫收錄，出發前請確認實際營業資訊。"),
         "addr": address, "e": emoji, "t": tone,
         "sourceUrl": _pick(record,"SourceURL") if osm_record else SOURCE_PAGE,
         "sourceLabel": "© OpenStreetMap contributors（ODbL）" if osm_record else SOURCE_LABEL,
