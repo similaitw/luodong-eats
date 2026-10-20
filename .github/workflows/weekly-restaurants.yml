@@ -1,0 +1,89 @@
+name: Weekly Luodong Restaurant Update
+
+on:
+  # 星期一 09:17 Asia/Taipei（UTC 01:17）
+  schedule:
+    - cron: '17 1 * * 1'
+  workflow_dispatch:
+  # 部署排程時立刻做一次；更新程式日後調整也會測試
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/update-official-restaurants.py'
+      - 'tests/test_weekly_updater.py'
+      - '.github/workflows/weekly-restaurants.yml'
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: weekly-luodong-restaurants
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Test safe government data import logic
+        run: python -m unittest discover -s tests -p 'test_weekly_updater.py' -v
+
+      - name: Download and compare Tourism Administration restaurants
+        run: python scripts/update-official-restaurants.py
+
+      - name: Generate classic site data bundle
+        run: node scripts/build-legacy-data.mjs
+
+      - name: Verify both site catalogs
+        run: |
+          node --check data-auto.js
+          node --check shared/legacy-data.js
+          node scripts/validate.mjs
+
+      - name: Write report to job summary
+        shell: bash
+        run: |
+          echo '### 羅東食刻每週商家更新' >> "$GITHUB_STEP_SUMMARY"
+          echo '資料來源：交通部觀光署餐飲開放資料' >> "$GITHUB_STEP_SUMMARY"
+          echo '更新日期（台灣時間）：' >> "$GITHUB_STEP_SUMMARY"
+          cat data/update-status.json >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit verified changes and both-site bundle
+        shell: bash
+        run: |
+          git add data-auto.js data/update-status.json data/update-review.json shared/legacy-data.js
+          if git diff --cached --quiet; then
+            echo "商家資料與上次相同，無須建立提交。"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore(weekly): refresh official Luodong food records and two-site bundle [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: Report updater errors as a single open issue
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          existing="$(gh issue list --state open --limit 100 --json title --jq '.[].title' | grep -F '羅東食刻：商家自動更新異常' || true)"
+          if [ -z "$existing" ]; then
+            gh issue create \
+              --title "羅東食刻：商家自動更新異常" \
+              --body "每週商家更新流程失敗；原有店家資料保留不變。請檢查 GitHub Actions 的 Weekly Luodong Restaurant Update 執行紀錄，確認觀光署資料可用性及欄位格式。"
+          fi
