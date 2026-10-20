@@ -3,6 +3,7 @@
    Both the new site and classic Vercel site must resolve to this catalog.
    Rebuilt by scripts/build-legacy-data.mjs on every source change.
 */
+
 ;
 /* BEGIN data.js */
 // 羅東食刻初始名單。資料來源與更新說明見 README.md。
@@ -60,6 +61,7 @@ window.LUODONG_RESTAURANTS = [
 ];
 
 /* END data.js */
+
 ;
 /* BEGIN data-extra.js */
 // 網路來源擴充名單 (2026-10-20)。只確認「來源列有這家」，不保證今日仍營業。
@@ -117,6 +119,7 @@ window.LUODONG_DATA_STATS = {base:already.length-added,onlineAdded:added,total:a
 })();
 
 /* END data-extra.js */
+
 ;
 /* BEGIN advanced/adapter.js */
 // 由首頁共同店家資料轉換供地圖與路線功能使用，無獨立名單。
