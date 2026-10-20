@@ -1,0 +1,4 @@
+/* 擴充資料集的資訊透明度與手機導航 */
+.card-source{display:inline-flex;align-items:center;align-self:flex-start;font-weight:800;font-size:11px;line-height:1.5;color:#38674d;text-decoration:underline;text-underline-offset:3px;margin:-5px 0 14px}
+.card-source:hover{color:#1b462f}.card-source:focus-visible{outline:2px solid #2478b8;outline-offset:3px}
+@media(max-width:700px){.hero-actions>a[href*="advanced"]{flex-basis:100%;max-width:300px}.section-title-row>.outline-btn{max-width:none}.results-heading{padding-block:18px 14px}}
