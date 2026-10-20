@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192" role="img" aria-label="羅東食刻">
+  <rect width="192" height="192" rx="42" fill="#ffd37b"/>
+  <rect x="17" y="17" width="158" height="158" rx="35" fill="#fff7e8"/>
+  <circle cx="96" cy="101" r="57" fill="#ffffff" stroke="#29392d" stroke-width="10"/>
+  <path d="M58 90q8 49 38 49t38-49" fill="#f76a4d"/>
+  <path d="M58 92q17-25 38-8 23-17 38 8" fill="none" stroke="#fbc85f" stroke-width="11" stroke-linecap="round"/>
+  <path d="M70 62q-3 14 4 23M94 55q-4 14 3 24M118 62q-3 13 3 22" fill="none" stroke="#618663" stroke-width="7" stroke-linecap="round"/>
+  <path d="M54 39l7 9 11 1-9 7-2 11-7-9-11-2 9-7z" fill="#f46645"/>
+</svg>
