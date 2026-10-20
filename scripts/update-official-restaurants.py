@@ -85,7 +85,16 @@ def fetch_records(url: str = SOURCE_URL, fixture: str | None = None) -> list[dic
     try:
         archive = zipfile.ZipFile(io.BytesIO(data))
     except zipfile.BadZipFile as exc:
-        raise RuntimeError("官方資料不是有效的 ZIP 壓縮檔") from exc
+        # 有些來源會回傳解壓後的 JSON；若為 HTML/封鎖頁，記錄辨識資訊方便排查。
+        try:
+            parsed=json.loads(data.decode("utf-8-sig"))
+            recovered=_unpack_records(parsed)
+            if recovered:
+                return recovered
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            pass
+        snippet=data[:140].decode("utf-8",errors="replace")
+        raise RuntimeError(f"官方資料不是 ZIP/JSON；前140字元={snippet!r}，大小={len(data)}") from exc
     with archive:
         members = [x for x in archive.infolist() if x.filename.lower().endswith(".json") and not x.is_dir()]
         if not members:
