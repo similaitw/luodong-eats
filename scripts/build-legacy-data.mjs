@@ -3,10 +3,10 @@ import { fileURLToPath } from "node:url";
 import { resolve, dirname } from "node:path";
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
-const parts=["data.js","data-extra.js","advanced/adapter.js"];
+const parts=["data.js","data-extra.js","data-auto.js","advanced/adapter.js"];
 const header=[
  "/* GENERATED FILE — DO NOT EDIT DIRECTLY.",
- "   Source of truth: data.js + data-extra.js + advanced/adapter.js.",
+ "   Source of truth: data.js + data-extra.js + data-auto.js + advanced/adapter.js.",
  "   Both the new site and classic Vercel site must resolve to this catalog.",
  "   Rebuilt by scripts/build-legacy-data.mjs on every source change.",
  "*/",""
