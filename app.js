@@ -261,6 +261,11 @@
   });
 
   el("heroCount").textContent = String(items.length);
+  const checkDate = window.LUODONG_LAST_OFFICIAL_CHECK || "";
+  if (/^\d{4}-\d{2}-\d{2}$/.test(checkDate)) {
+    el("lastSyncStamp").textContent = " 最近商家資料掃描：" + checkDate + "。";
+  }
+
   el("heroRandom").addEventListener("click", randomPick);
   el("surpriseButton").addEventListener("click", randomPick);
   el("dialogAgain").addEventListener("click", randomPick);
