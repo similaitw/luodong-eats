@@ -15,6 +15,12 @@
     },
     {
       "type": "同名不同址待確認",
+      "name": "星巴克",
+      "currentAddress": "宜蘭縣羅東鎮興東路97",
+      "sourceAddress": "宜蘭縣羅東鎮中正北路124巷"
+    },
+    {
+      "type": "同名不同址待確認",
       "name": "八方雲集",
       "currentAddress": "宜蘭縣冬山鄉冬山路一段1070",
       "sourceAddress": "宜蘭縣三星鄉三星路五段5"
@@ -116,5 +122,5 @@
       "sourceAddress": "宜蘭縣蘇澳鎮中山路一段10"
     }
   ],
-  "reviewRequired": 19
+  "reviewRequired": 20
 }

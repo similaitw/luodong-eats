@@ -1,16 +1,16 @@
 {
-  "sourceLocalCount": 86,
-  "new": 67,
+  "sourceLocalCount": 93,
+  "new": 6,
   "remainingCandidates": 0,
-  "previousOfficialCount": 0,
-  "totalOfficialCount": 67,
-  "reviewRequired": 19,
+  "previousOfficialCount": 67,
+  "totalOfficialCount": 73,
+  "reviewRequired": 20,
   "missingFromFeed": 0,
   "curatedCount": 245,
   "checkedAt": "2026-10-20",
   "source": "https://www.openstreetmap.org/copyright",
   "sourceName": "OpenStreetMap contributors（ODbL）",
   "sourceDownload": "Overpass API",
-  "feedRecordCount": 86,
+  "feedRecordCount": 93,
   "mode": "scheduled"
 }

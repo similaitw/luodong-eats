@@ -589,6 +589,22 @@ window.LUODONG_OFFICIAL_DATA = [
     "externalID": "osm:node:8150816301"
   },
   {
+    "id": "osm6479fc17daea92",
+    "n": "築間幸福鍋物",
+    "a": "五結",
+    "c": "小吃",
+    "m": "",
+    "b": 0,
+    "s": "OpenStreetMap 社群地圖收錄，出發前請確認實際營業資訊。",
+    "addr": "宜蘭縣五結鄉中正路一段2巷75弄26",
+    "e": "🥟",
+    "t": "yellow",
+    "sourceUrl": "https://www.openstreetmap.org/node/14073940699",
+    "sourceLabel": "© OpenStreetMap contributors（ODbL）",
+    "sourceCheckedAt": "2026-10-20",
+    "externalID": "osm:node:14073940699"
+  },
+  {
     "id": "osm6d7224f9c203b5",
     "n": "市民小站",
     "a": "羅東市區",
@@ -653,6 +669,22 @@ window.LUODONG_OFFICIAL_DATA = [
     "externalID": "osm:node:11957653669"
   },
   {
+    "id": "osm73a5752065f47c",
+    "n": "美都西點麵包店",
+    "a": "三星",
+    "c": "小吃",
+    "m": "",
+    "b": 0,
+    "s": "OpenStreetMap 社群地圖收錄，出發前請確認實際營業資訊。",
+    "addr": "宜蘭縣三星鄉三星路五段29",
+    "e": "🥟",
+    "t": "yellow",
+    "sourceUrl": "https://www.openstreetmap.org/node/14177509197",
+    "sourceLabel": "© OpenStreetMap contributors（ODbL）",
+    "sourceCheckedAt": "2026-10-20",
+    "externalID": "osm:node:14177509197"
+  },
+  {
     "id": "osm78c8abcb1c5067",
     "n": "吳記魷魚滷配料大王",
     "a": "羅東市區",
@@ -683,6 +715,22 @@ window.LUODONG_OFFICIAL_DATA = [
     "sourceLabel": "© OpenStreetMap contributors（ODbL）",
     "sourceCheckedAt": "2026-10-20",
     "externalID": "osm:node:5030794021"
+  },
+  {
+    "id": "osm7fea9de06e1b51",
+    "n": "Kung Fu Tea",
+    "a": "羅東市區",
+    "c": "小吃",
+    "m": "",
+    "b": 0,
+    "s": "OpenStreetMap 社群地圖收錄，出發前請確認實際營業資訊。",
+    "addr": "宜蘭縣羅東鎮公正路290-1",
+    "e": "🥟",
+    "t": "yellow",
+    "sourceUrl": "https://www.openstreetmap.org/node/9518754253",
+    "sourceLabel": "© OpenStreetMap contributors（ODbL）",
+    "sourceCheckedAt": "2026-10-20",
+    "externalID": "osm:node:9518754253"
   },
   {
     "id": "osm858bf9dad4553f",
@@ -941,6 +989,22 @@ window.LUODONG_OFFICIAL_DATA = [
     "externalID": "osm:node:9540404572"
   },
   {
+    "id": "osmce0782e4470736",
+    "n": "五結養生紫米飯糰",
+    "a": "五結",
+    "c": "小吃",
+    "m": "",
+    "b": 0,
+    "s": "OpenStreetMap 社群地圖收錄，出發前請確認實際營業資訊。",
+    "addr": "宜蘭縣五結鄉中正路一段104",
+    "e": "🥟",
+    "t": "yellow",
+    "sourceUrl": "https://www.openstreetmap.org/node/8952561417",
+    "sourceLabel": "© OpenStreetMap contributors（ODbL）",
+    "sourceCheckedAt": "2026-10-20",
+    "externalID": "osm:node:8952561417"
+  },
+  {
     "id": "osmd11fc43491f5ee",
     "n": "羅東碳烤燒餅餅店",
     "a": "羅東市區",
@@ -971,6 +1035,22 @@ window.LUODONG_OFFICIAL_DATA = [
     "sourceLabel": "© OpenStreetMap contributors（ODbL）",
     "sourceCheckedAt": "2026-10-20",
     "externalID": "osm:node:3759112217"
+  },
+  {
+    "id": "osmd6dfbd2216c6a5",
+    "n": "胡同裏燒肉 宜蘭店",
+    "a": "五結",
+    "c": "小吃",
+    "m": "",
+    "b": 0,
+    "s": "OpenStreetMap 社群地圖收錄，出發前請確認實際營業資訊。",
+    "addr": "宜蘭縣五結鄉中正路一段2巷75弄26",
+    "e": "🥟",
+    "t": "yellow",
+    "sourceUrl": "https://www.openstreetmap.org/node/14073940698",
+    "sourceLabel": "© OpenStreetMap contributors（ODbL）",
+    "sourceCheckedAt": "2026-10-20",
+    "externalID": "osm:node:14073940698"
   },
   {
     "id": "osmd712deb808026b",
@@ -1115,6 +1195,22 @@ window.LUODONG_OFFICIAL_DATA = [
     "sourceLabel": "© OpenStreetMap contributors（ODbL）",
     "sourceCheckedAt": "2026-10-20",
     "externalID": "osm:node:11286141769"
+  },
+  {
+    "id": "osme7573db294e131",
+    "n": "Mr. Wish",
+    "a": "羅東市區",
+    "c": "小吃",
+    "m": "",
+    "b": 0,
+    "s": "OpenStreetMap 社群地圖收錄，出發前請確認實際營業資訊。",
+    "addr": "宜蘭縣羅東鎮公正路260",
+    "e": "🥟",
+    "t": "yellow",
+    "sourceUrl": "https://www.openstreetmap.org/node/9523296742",
+    "sourceLabel": "© OpenStreetMap contributors（ODbL）",
+    "sourceCheckedAt": "2026-10-20",
+    "externalID": "osm:node:9523296742"
   },
   {
     "id": "osme96a9ed64e5b31",
