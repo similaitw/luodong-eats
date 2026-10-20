@@ -6,6 +6,7 @@ on:
     paths:
       - data.js
       - data-extra.js
+      - data-auto.js
       - advanced/adapter.js
       - scripts/build-legacy-data.mjs
       - .github/workflows/sync-classic.yml
