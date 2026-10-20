@@ -1,0 +1,55 @@
+name: Sync classic restaurant catalog
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - data.js
+      - data-extra.js
+      - advanced/adapter.js
+      - scripts/build-legacy-data.mjs
+      - .github/workflows/sync-classic.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: luodong-classic-data-sync
+  cancel-in-progress: false
+
+jobs:
+  rebuild-classic-bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Generate classic-compatible restaurant data
+        run: node scripts/build-legacy-data.mjs
+
+      - name: Validate both site data formats
+        run: |
+          node --check shared/legacy-data.js
+          node scripts/validate.mjs
+
+      - name: Commit generated file only when different
+        shell: bash
+        run: |
+          if git diff --quiet -- shared/legacy-data.js; then
+            echo "Restaurant bundle already matches source."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add shared/legacy-data.js
+          git commit -m "chore(sync): rebuild shared classic restaurant data [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:main
