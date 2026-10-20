@@ -1,5 +1,5 @@
 /* GENERATED FILE — DO NOT EDIT DIRECTLY.
-   Source of truth: data.js + data-extra.js + advanced/adapter.js.
+   Source of truth: data.js + data-extra.js + data-auto.js + advanced/adapter.js.
    Both the new site and classic Vercel site must resolve to this catalog.
    Rebuilt by scripts/build-legacy-data.mjs on every source change.
 */
@@ -119,6 +119,32 @@ window.LUODONG_DATA_STATS = {base:already.length-added,onlineAdded:added,total:a
 })();
 
 /* END data-extra.js */
+
+;
+/* BEGIN data-auto.js */
+// 觀光署官方資料的自動收錄名單；由每週 GitHub Actions 維護，請勿直接手改。
+window.LUODONG_OFFICIAL_DATA = [];
+(function () {
+  "use strict";
+  const shops = Array.isArray(window.LUODONG_RESTAURANTS) ? window.LUODONG_RESTAURANTS : [];
+  const additions = Array.isArray(window.LUODONG_OFFICIAL_DATA) ? window.LUODONG_OFFICIAL_DATA : [];
+  const ids = new Set(shops.map(x => x.id));
+  const names = new Set(shops.map(x => String(x.n || "").normalize("NFKC").toLowerCase().replace(/[\\s　()（）．·-]/g, "")));
+  let count = 0;
+  for (const row of additions) {
+    const name = String(row.n || "").normalize("NFKC").toLowerCase().replace(/[\\s　()（）．·-]/g, "");
+    if (!row.id || !row.n || !row.addr || ids.has(row.id) || names.has(name)) continue;
+    shops.push(row);
+    ids.add(row.id); names.add(name); count++;
+  }
+  window.LUODONG_RESTAURANTS = shops;
+  const stats = window.LUODONG_DATA_STATS || {};
+  stats.officialAdded = count;
+  stats.total = shops.length;
+  window.LUODONG_DATA_STATS = stats;
+})();
+
+/* END data-auto.js */
 
 ;
 /* BEGIN advanced/adapter.js */
