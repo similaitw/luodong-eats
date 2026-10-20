@@ -8,7 +8,7 @@
 - **47 家初始店家**：羅東夜市、羅東市區、林場、運動公園、五結、冬山。
 - **多條件篩選**：店名／餐點／地點搜尋、地區、時段、預算參考、料理分類。
 - **快速入口**：銅板解決、好好吃飯、夜市走走、喝點甜的。
-- **收藏清單**：存於使用者瀏覽器 \`localStorage\`，無須登入，也不會跨裝置同步。
+- **收藏清單**：存於使用者瀏覽器 `localStorage`，無須登入，也不會跨裝置同步。
 - **地圖查詢**：每家店可開啟 Google Maps 搜尋，使用者可確認地址、營業資訊及路線。
 - **RWD 響應式版型**：手機、平板、桌機皆可使用；使用原生 HTML、CSS、JavaScript。
 
@@ -16,50 +16,50 @@
 
 | 檔案 | 說明 |
 | --- | --- |
-| \`index.html\` | 網站結構、搜尋及抽選視窗 |
-| \`style.css\` | 版型及 RWD |
-| \`data.js\` | 初始店家名單，編輯這裡即可增修資料 |
-| \`app.js\` | 隨機抽選、篩選、收藏與 Google Maps 連結 |
-| \`icon.svg\`、\`manifest.webmanifest\` | 圖示與基本 PWA 中繼資料 |
+| `index.html` | 網站結構、搜尋及抽選視窗 |
+| `style.css` | 版型及 RWD |
+| `data.js` | 初始店家名單，編輯這裡即可增修資料 |
+| `app.js` | 隨機抽選、篩選、收藏與 Google Maps 連結 |
+| `icon.svg`、`manifest.webmanifest` | 圖示與基本 PWA 中繼資料 |
 
 不用建置（build）、不用資料庫、不使用 Google Maps API 金鑰。
 
 ## 在本機啟動
 
-建議用靜態伺服器，避免用 \`file://\` 方式直接開檔：
+建議用靜態伺服器，避免用 `file://` 方式直接開檔：
 
-\`\`\`powershell
+```powershell
 git clone https://github.com/similaitw/luodong-eats.git
 cd luodong-eats
 python -m http.server 8000
-\`\`\`
+```
 
 打開 http://localhost:8000 。
 
 ## 免費部署
 
-**Vercel / Cloudflare Pages**：把 GitHub Repository 匯入為靜態網站，不指定 framework，根目錄為 \`/\`，不需要安裝指令或 build 指令，也不需要環境變數。Git push 更新後即可自動部署。
+**Vercel / Cloudflare Pages**：把 GitHub Repository 匯入為靜態網站，不指定 framework，根目錄為 `/`，不需要安裝指令或 build 指令，也不需要環境變數。Git push 更新後即可自動部署。
 
-**GitHub Pages**：Settings → Pages → Build and deployment → Deploy from a branch → 選 \`main\` 和 \`/ (root)\` → Save。網址通常為 \`https://similaitw.github.io/luodong-eats/\`，實際以 GitHub Pages 顯示為準。
+**GitHub Pages**：Settings → Pages → Build and deployment → Deploy from a branch → 選 `main` 和 `/ (root)` → Save。網址通常為 `https://similaitw.github.io/luodong-eats/`，實際以 GitHub Pages 顯示為準。
 
 > 在本專案中，免費指的是程式本身不需要付費 API / 運算服務，不保證第三方託管平台未來政策與帳號額度。
 
 ## 編輯店家資料
 
-在 \`data.js\` 的 \`window.LUODONG_RESTAURANTS\` 陣列新增物件：
+在 `data.js` 的 `window.LUODONG_RESTAURANTS` 陣列新增物件：
 
-\`\`\`js
+```js
 {id:"ld048",n:"店名",a:"羅東市區",c:"小吃",m:"早餐,午餐",b:1,
  s:"簡單特色說明。",addr:"宜蘭縣羅東鎮…",e:"🥟",t:"yellow"}
-\`\`\`
+```
 
-- \`id\`：唯一且固定，避免破壞舊收藏
-- \`a\`：羅東夜市／羅東市區／羅東林場／羅東運動公園／五結／冬山
-- \`c\`：小吃／夜市／正餐／異國／咖啡甜點
-- \`m\`：早餐、午餐、下午茶、晚餐、宵夜，**僅為推薦使用時段，不是營業時間**
-- \`b\`：1 平價優先／2 一般消費／3 聚餐選擇，**編輯概估而非真實價格**
-- \`addr\`：不確定時請留白，Google 地圖會以店名和區域搜尋
-- \`t\`：orange／yellow／pink／green／blue／lilac
+- `id`：唯一且固定，避免破壞舊收藏
+- `a`：羅東夜市／羅東市區／羅東林場／羅東運動公園／五結／冬山
+- `c`：小吃／夜市／正餐／異國／咖啡甜點
+- `m`：早餐、午餐、下午茶、晚餐、宵夜，**僅為推薦使用時段，不是營業時間**
+- `b`：1 平價優先／2 一般消費／3 聚餐選擇，**編輯概估而非真實價格**
+- `addr`：不確定時請留白，Google 地圖會以店名和區域搜尋
+- `t`：orange／yellow／pink／green／blue／lilac
 
 改完 commit、push 即可更新網站。
 
