@@ -70,3 +70,11 @@ Vercel / Cloudflare Pages 可選純靜態網站，根目錄 `/`，無需 build �
 2026-10-20 起，新舊兩個正式網址共用 **245 家**店家資料。舊站經 Vercel Routing Rules 透明讀取新版提供的相容資料檔；每次 GitHub 資料來源更新時，Actions 自動重新產生並部署。**不同網域的收藏或個人 localStorage 不會互相同步**。
 
 詳細設定、維護方式、路由 ID 與回復步驟：[兩站同步文件](docs/TWO_SITE_SYNC.md)。
+
+## 定時商家更新（已啟用）
+
+每週一 09:17（臺灣時間）由 GitHub Actions 定時檢查商家，主要讀取交通部觀光署公開餐飲資料；政府端限制 GitHub 存取時，自動切換 OpenStreetMap / Overpass 資料。第一輪成功新增 67 家，因此在 2026-10-20 名單為 **312 家**（原有 245 + 新增 67）。
+
+排程會以公開資料中**店名及地址明確**的店家為主要自動新增對象，去重、保留來源，並產生待人工確認的搬遷／改名／可能歇業紀錄。**絕不因外部資料暫時缺席而自動刪店，也不宣稱即時營業。** 來源若失敗會建立 GitHub Issue，不覆寫現有資料。
+
+[排程及操作說明](docs/WEEKLY_UPDATE.md) · [GitHub Actions 執行紀錄](https://github.com/similaitw/luodong-eats/actions/workflows/weekly-restaurants.yml) · [© OpenStreetMap contributors（ODbL）](https://www.openstreetmap.org/copyright)
