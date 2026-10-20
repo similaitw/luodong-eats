@@ -14,15 +14,17 @@
   <link rel="stylesheet" href="./style.css" />
   <title>羅東食刻｜今天吃什麼？</title>
   <script src="./data.js" defer></script>
+  <script src="./data-extra.js" defer></script>
   <script src="./app.js" defer></script>
 </head>
 <body>
   <a class="skip" href="#explore">跳到店家清單</a>
-  <div class="announcement"><span class="live-dot" aria-hidden="true"></span> 在地好味道，下一餐不煩惱 <span class="announcement-right">羅東 · 五結 · 冬山</span></div>
+  <div class="announcement"><span class="live-dot" aria-hidden="true"></span> 在地好味道，下一餐不煩惱 <span class="announcement-right">羅東 · 五結 · 冬山 · 三星 · 蘇澳</span></div>
   <header class="site-header shell">
     <a class="brand" href="./" aria-label="羅東食刻首頁"><span class="brand-icon" aria-hidden="true">🍚</span><span>羅東<span class="brand-accent">食刻</span><small>LUODONG EATS</small></span></a>
     <nav class="header-nav" aria-label="主選單">
       <a href="#explore" class="nav-link">探索美食</a>
+      <a href="./advanced/" class="nav-link nav-desktop">地圖與路線</a>
       <a href="#how-it-works" class="nav-link nav-desktop">使用方式</a>
       <button type="button" id="favoritesToggle" class="nav-fav" aria-pressed="false"><span aria-hidden="true">♥</span> 我的收藏 <span id="favoriteCount" class="fav-count">0</span></button>
     </nav>
@@ -37,6 +39,7 @@
         <div class="hero-actions">
           <button type="button" id="heroRandom" class="primary-btn"><span class="button-icon" aria-hidden="true">✦</span> 幫我決定！ <span aria-hidden="true">↗</span></button>
           <a href="#explore" class="secondary-btn">自己慢慢挑 <span aria-hidden="true">↓</span></a>
+          <a href="./advanced/" class="secondary-btn">🗺 地圖與多站路線 ↗</a>
         </div>
         <div class="hero-foot"><div class="hero-avatars" aria-hidden="true"><span>🥟</span><span>🍜</span><span>🧋</span></div><span><strong id="heroCount">—</strong> 家精選店家，持續擴充中</span></div>
       </div>
@@ -62,7 +65,7 @@
     </section>
 
     <section class="explore-section shell" id="explore" aria-labelledby="exploreTitle">
-      <div class="section-title-row"><div><span class="eyebrow-sm">DISCOVER LUODONG</span><h2 id="exploreTitle">美食探索地圖 <span class="scribble">✳</span></h2><p>從羅東夜市到五結、冬山，找出今天的命定美食。</p></div><button type="button" id="surpriseButton" class="outline-btn"><span aria-hidden="true">🎲</span> 隨機抽一家</button></div>
+      <div class="section-title-row"><div><span class="eyebrow-sm">DISCOVER LUODONG</span><h2 id="exploreTitle">美食探索地圖 <span class="scribble">✳</span></h2><p>從羅東夜市到五結、冬山、三星、蘇澳、南方澳，找出今天的命定美食。</p></div><a href="./advanced/" class="outline-btn">🗺️ 進階地圖</a><button type="button" id="surpriseButton" class="outline-btn"><span aria-hidden="true">🎲</span> 隨機抽一家</button></div>
       <div class="filters" aria-label="篩選店家">
         <div class="search-wrap"><span class="search-icon" aria-hidden="true">⌕</span><input type="search" id="search" placeholder="搜尋店名、餐點或地點…" autocomplete="off" aria-label="搜尋店家、餐點或地點" /><button id="clearSearch" type="button" class="clear-search" aria-label="清除搜尋" hidden>×</button></div>
         <div class="filter-control"><label for="areaFilter">地區</label><select id="areaFilter"><option value="">全部地區</option></select></div>
@@ -73,7 +76,7 @@
       <div class="results-heading"><span id="resultLabel">正在整理美味清單…</span><button id="resetFilters" type="button" class="reset-btn">重設篩選 ↺</button></div>
       <div id="restaurantGrid" class="restaurant-grid" aria-live="polite"></div>
       <div id="emptyState" class="empty-state" hidden><div>🍽️</div><h3>目前沒有符合條件的店家</h3><p>換個分類、預算或地區，或按重設篩選再試一次。</p><button type="button" id="emptyReset" class="secondary-btn">查看全部店家</button></div>
-      <div class="data-note"><span aria-hidden="true">ⓘ</span> 店家資訊為人工整理的初始名單；餐點、預算分級為參考，非即時菜單或營業狀態。出發前請點開 Google 地圖確認。</div>
+      <div class="data-note"><span aria-hidden="true">ⓘ</span> 店家來源可於卡片查看；新增店家未取得可靠時段與價格時將標示「待確認」，非即時菜單或營業狀態。出發前請點開 Google 地圖確認。</div>
     </section>
 
     <section id="how-it-works" class="about-section">
