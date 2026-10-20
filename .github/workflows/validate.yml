@@ -21,5 +21,9 @@ jobs:
         run: |
           node --check app.js
           node --check data.js
+          node --check data-extra.js
+          node --check advanced/app.js
+          node --check advanced/adapter.js
+          node --check advanced/config.js
       - name: Validate website data
         run: node scripts/validate.mjs
